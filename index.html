@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Photo DeDup AI - مكتشف الصور المكررة</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <h1>📸 Photo DeDup AI</h1>
+                <p class="subtitle">مكتشف الصور المكررة - Duplicate Image Finder</p>
+            </header>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Left Panel - Controls -->
+                <div class="left-panel">
+                    <!-- Folder Selection -->
+                    <div class="control-section">
+                        <h3>📁 Select Folder(s)</h3>
+                        <div class="folder-input-group">
+                            <input type="text" id="folderPath" placeholder="No folder selected" readonly>
+                            <button id="selectFolderBtn" class="btn btn-primary" type="button">Select Folder(s)</button>
+                        </div>
+                        <div id="selectedFolders" class="selected-folders"></div>
+                        <div id="apiStatus" class="api-status"
+                            style="display: none; color: #ff4444; font-size: 11px; margin-top: 5px;"></div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="control-section">
+                        <h3>⚙️ Settings</h3>
+
+                        <div class="setting-item">
+                            <label for="similarityThreshold">Similarity Threshold:</label>
+                            <div class="slider-container">
+                                <input type="range" id="similarityThreshold" min="70" max="99" value="95" step="1">
+                                <span id="thresholdValue">95%</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label for="hashThreshold">Hash Threshold:</label>
+                            <div class="slider-container">
+                                <input type="range" id="hashThreshold" min="0" max="10" value="5" step="1">
+                                <span id="hashThresholdValue">5</span>
+                            </div>
+                            <small>Lower = stricter duplicate detection</small>
+                        </div>
+
+                        <div class="setting-item">
+                            <label for="outputFolder">Output Folder:</label>
+                            <div class="folder-input-group">
+                                <input type="text" id="outputFolder" placeholder="organized_images" readonly>
+                                <button id="selectOutputBtn" class="btn btn-secondary">Change</button>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="useCNN" checked>
+                                Use CNN Model (High Accuracy)
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="autoDeleteLowRes">
+                                Auto-delete lower resolution duplicates
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="moveDuplicates" checked>
+                                Move duplicates to folder (safer)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="control-section">
+                        <button id="scanBtn" class="btn btn-scan">🔍 Scan Images</button>
+                        <button id="deleteBtn" class="btn btn-delete" disabled>🗑️ Delete Duplicates</button>
+                        <button id="organizeBtn" class="btn btn-organize">👥 Organize by Person</button>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="control-section">
+                        <div class="progress-container">
+                            <div id="progressBar" class="progress-bar"></div>
+                            <div id="progressText" class="progress-text">Ready</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="control-section stats-section">
+                        <h3>📊 Statistics</h3>
+                        <div id="stats" class="stats-content">
+                            <div class="stat-item">
+                                <span class="stat-label">Total Images:</span>
+                                <span class="stat-value" id="totalImages">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Duplicates Found:</span>
+                                <span class="stat-value" id="duplicatesFound">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Groups:</span>
+                                <span class="stat-value" id="duplicateGroups">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Space Saved:</span>
+                                <span class="stat-value" id="spaceSaved">0 MB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Results -->
+                <div class="right-panel">
+                    <div class="results-header">
+                        <h2>Results - Duplicate Groups</h2>
+                        <div class="results-actions">
+                            <button id="clearResultsBtn" class="btn btn-small">Clear</button>
+                        </div>
+                    </div>
+                    <div id="resultsContainer" class="results-container">
+                        <div class="empty-state">
+                            <p>👆 Select folder(s) and click "Scan Images" to find duplicates</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="renderer.js"></script>
+    </body>
+
+</html>
